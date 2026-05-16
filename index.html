@@ -80,6 +80,14 @@
                     <span class="tag">VER DETALHES</span>
                 </div>
             </div>
+            <div class="project-card" onclick="openModal('modalCarrinhoBT')">
+                <div class="project-card__image-container">
+                    <img src="assets/carrinho.jpeg" alt="Hardware do Carrinho Bluetooth" class="project-card__img">
+                </div>
+                <h3 class="project-card__title">IoT: Robótica via Bluetooth</h3>
+                <p class="project-card__summary">Desenvolvimento de um rover com Arduino Uno, HC-05 e comunicação Serial via app.</p>
+                <span class="tag">VER DETALHES</span>
+            </div>
         </section>
 
         <div id="modalBruteForce" class="modal">
@@ -110,6 +118,37 @@
                     <div class="modal-footer">
                         <p>Esse projeto me fez enxergar como um atacante age, e como um SOC pode neutralizar a situação.</p>
                     </div>
+                </div>
+            </div>
+        </div>
+        <!-- PROJETO CARRINHO -->
+        <div id="modalCarrinhoBT" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('modalCarrinhoBT')">&times;</span>
+                <h2 class="modal-title">Exploração IoT: Robótica e Comunicação Bluetooth</h2>
+                
+                <div class="modal-section">
+                    <h3>Sobre o Projeto</h3>
+                    <p>Projeto prático desenvolvido na faculdade focado na integração de hardware e software para controle remoto. O objetivo foi estabelecer uma comunicação confiável entre um aplicativo mobile e um microcontrolador através do protocolo Bluetooth (RFCOMM).</p>
+                </div>
+
+                <div class="modal-section" style="text-align: center;">
+                    <h3>Demonstração Prática</h3>
+                    <video controls style="width: 100%; max-width: 450px; border: 2px solid var(--titulos-icones); border-radius: 8px; box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); margin-top: 15px;">
+                        <source src="assets/video-carrinho.mp4" type="video/mp4">
+                        Seu navegador não suporta a tag de vídeo.
+                    </video>
+                    <p style="font-size: 12px; color: #8b949e; margin-top: 8px;">(Interface de controle via Bluetooth Serial)</p>
+                </div>
+
+                <div class="modal-section">
+                    <h3>Especificações Técnicas</h3>
+                    <ul>
+                        <li><strong>Microcontrolador:</strong> Arduino Uno R3.</li>
+                        <li><strong>Comunicação:</strong> Módulo Bluetooth HC-05 configurado para comunicação Serial.</li>
+                        <li><strong>Atuadores:</strong> Motores DC controlados via Ponte H (Driver L298N).</li>
+                        <li><strong>Perspectiva de Segurança (IoT):</strong> Estudo prático de como os dados são transmitidos em texto claro via Bluetooth e as possíveis vulnerabilidades de interceptação em redes sem fio não criptografadas.</li>
+                    </ul>
                 </div>
             </div>
         </div>
