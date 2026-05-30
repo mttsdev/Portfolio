@@ -66,7 +66,7 @@
                 <i class="fas fa-external-link-alt"></i> Visualizar Currículo
             </a>
         </section>
-        <!-- PROJETOS -->
+        <!-- PROJETOS( antes de clicar ) -->
         <section id="projetos" class="section">
             <h2 class="section-title">Projetos em Destaque</h2>
             
@@ -88,8 +88,19 @@
                 <p class="project-card__summary">Desenvolvimento de um rover com Arduino Uno, HC-05 e comunicação Serial via app.</p>
                 <span class="tag">VER DETALHES</span>
             </div>
+            <div class="project-card" onclick="openModal('modalNmap')">
+                <div class="project-card__image-container">
+                    <picture>
+                        <source media="(min-width: 768px)" srcset="assets/projeto-nmap/card-maior.png">
+                        
+                        <img src="assets/projeto-nmap/card-menor.jpeg" alt="Varredura Nmap Terminal" class="project-card__img">
+                    </picture>
+                </div>
+                <h3 class="project-card__title">Recon: Mapeamento de Rede</h3>
+                <p class="project-card__summary">Auditoria de infraestrutura e identificação de serviços expostos utilizando Nmap.</p>
+                <span class="tag">VER DETALHES</span>
+            </div>
         </section>
-
         <div id="modalBruteForce" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeModal('modalBruteForce')">&times;</span>
@@ -152,6 +163,83 @@
                 </div>
             </div>
         </div>
+        <!-- PROJETO NMAP -->
+        <div id="modalNmap" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('modalNmap')">&times;</span>
+                <h2 class="modal-title">Análise de Varredura de Portas com Nmap, Brute Force e Visualização em SIEM</h2>
+                
+                <div class="modal-section">
+                    <h3>Descrição do Projeto</h3>
+                    <p>O objetivo principal deste laboratório foi executar uma varredura de rede intencionalmente agressiva contra um alvo Linux, analisar o comportamento dos pacotes diretamente no arquivo de log local (<code>auth.log</code>) e compreender a assinatura deixada por esse tráfego antes de centralizar e correlacionar a visibilidade em um SIEM.</p>
+                    <p>Inverter a perspectiva — estudando o impacto no host de destino antes de construir as regras de correlação — é fundamental para compreender o ruído real que as ferramentas de varredura geram nos sistemas operacionais.</p>
+                </div>
+
+                <div class="modal-section">
+                    <h3>1. Varredura com Nmap (TCP Connect Scan)</h3>
+                    <p>Para gerar uma assinatura nítida e de fácil detecção nos logs locais, utilizou-se a varredura do Nmap com a flag <code>-sT</code>.</p>
+                    <p>O fluxo técnico dessa varredura segue a seguinte mecânica:</p><br>
+                    <ul>
+                        <li><strong>Three-Way Handshake Completo:</strong> O scanner estabelece a conexão TCP completa (<code>SYN</code> ➡️ <code>SYN-ACK</code> ➡️ <code>ACK</code>) para validar se a porta está efetivamente aberta.</li><br>
+                        <li><strong>Encerramento Abrupto:</strong> Imediatamente após a confirmação da porta aberta, o scanner envia uma flag <code>RST</code> (Reset) para finalizar a conexão de forma abrupta, sem realizar uma troca de dados legítima.</li>
+                    </ul>
+                    <div style="text-align: center; margin-top: 15px;">
+                        <img src="assets/projeto-nmap/nmap--sT.jpeg" alt="Verificação Nmap -sT" style="width: 100%; max-width: 600px; border: 1px solid var(--titulos-icones); border-radius: 4px; box-shadow: 0 0 10px rgba(0,255,65,0.1);">
+                    </div>
+                </div>
+
+                <div class="modal-section">
+                    <h3>2. Análise do auth.log</h3>
+                    <p>Esse comportamento anômalo (conexão seguida de reset imediato) gera um padrão muito específico no arquivo <code>/var/log/auth.log</code>. O monitoramento desses logs locais revelou com precisão o mapeamento realizado, evidenciando a identificação da <strong>porta 22 (SSH)</strong> e a tentativa de fingerprinting do serviço.</p>
+                    <div style="text-align: center; margin-top: 15px;">
+                        <img src="assets/projeto-nmap/auth.log.jpeg" alt="Análise do auth.log" style="width: 100%; max-width: 600px; border: 1px solid var(--titulos-icones); border-radius: 4px; box-shadow: 0 0 10px rgba(0,255,65,0.1);">
+                    </div>
+                </div>
+
+                <div class="modal-section">
+                    <h3>3. Relevância para Detecção e Resposta para SOC</h3>
+                    <p>Compreender a engrenagem por trás de um scan de portas é vital para analistas de SOC. Para um atacante, o mapeamento de portas e a descoberta de versões exatas de serviços representam a fase de <strong>Reconhecimento</strong> dentro do Cyber Kill Chain.</p>
+                    <div style="text-align: center; margin-top: 15px; margin-bottom: 15px;">
+                        <img src="assets/projeto-nmap/version-ssh.jpeg" alt="Identificação da versão do SSH" style="width: 100%; max-width: 600px; border: 1px solid var(--titulos-icones); border-radius: 4px; box-shadow: 0 0 10px rgba(0,255,65,0.1);">
+                    </div>
+                    <p>A identificação bem-sucedida de um serviço exposto como o SSH abre margem para:</p><br>
+                    <ul>
+                        <li>Busca por <strong>CVEs</strong> conhecidas em versões desatualizadas.</li><br>
+                        <li>Ataques de <strong>Brute Force</strong> direcionados.</li><br>
+                        <li>Exploração de falhas estruturais ou vazamentos de chaves de autenticação.</li>
+                    </ul>
+                </div>
+
+                <div class="modal-section">
+                    <h3>4. Correlação e Verificação de Brute Force no SIEM</h3>
+                    <p>Após a fase de reconhecimento do cenário, foi simulado um ataque de força bruta contra o serviço SSH. Com os logs locais já centralizados no SIEM, foi possível criar regras de correlação para quantificar e monitorar a atividade maliciosa em tempo real.</p>
+                    <p>O painel abaixo exibe o volume total de tentativas de autenticação falhas executadas pelo atacante:</p>
+                    <div style="text-align: center; margin-top: 15px;">
+                        <img src="assets/projeto-nmap/count-brute-force.jpeg" alt="Contagem de Brute Force no SIEM" style="width: 100%; max-width: 600px; border: 1px solid var(--titulos-icones); border-radius: 4px; box-shadow: 0 0 10px rgba(0,255,65,0.1);">
+                    </div>
+                </div>
+
+                <div class="modal-section">
+                    <h3>5. Transformando tentativas em um gráfico de pizza</h3>
+                    <p>Para facilitar a triagem e o entendimento da linha do tempo do incidente pela equipe de resposta, os eventos foram plotados em um gráfico de quebra temporal, tornando visualmente evidente o pico de conexões anômalas:</p>
+                    <div style="text-align: center; margin-top: 15px;">
+                        <img src="assets/projeto-nmap/grafico.jpeg" alt="Gráfico de Volumetria do Ataque" style="width: 100%; max-width: 600px; border: 1px solid var(--titulos-icones); border-radius: 4px; box-shadow: 0 0 10px rgba(0,255,65,0.1);">
+                    </div>
+                </div>
+
+                <div class="modal-section">
+                    <h3>Conclusão e Aprendizados</h3>
+                    <p>Este laboratório reforça a importância da <strong>Defesa em Profundidade</strong>. Manter superfícies de ataque atualizadas e mitigar a exposição de versões de serviços são passos cruciais na redução de riscos. Além disso, o projeto demonstra o papel indispensável do SIEM no desenvolvimento de regras de correlação eficientes, permitindo que comportamentos suspeitos na camada de rede e de autenticação sejam detectados e contidos antes que se tornem um comprometimento real.</p>
+                </div>
+
+                <div class="modal-section" style="margin-top: 25px; text-align: center;">
+                    <a href="https://github.com/mttsdev/Varredura-de-portas-com-nmap" target="_blank" class="btn-cv">
+                        <i class="fab fa-github"></i> Acessar Repositório
+                    </a>
+                </div>
+            </div>
+        </div>
+
         <!-- SKILLS -->
         <section id="skills" class="section">
             <h2 class="section-title">Habilidades & Competências</h2>
@@ -179,6 +267,7 @@
                         <span class="skill-item soft">Comunicação</span>
                         <span class="skill-item soft">Trabalho em Equipe</span>
                         <span class="skill-item soft">Aprendizado Contínuo</span>
+                        <span class="skill-item soft">Paciente</span>
                         <span class="skill-item soft">Adaptável</span>
                         <span class="skill-item soft">Pensamento Analítico e Equilibrado</span>
                     </div>
@@ -258,16 +347,6 @@
                             <span style="color: white;">|</span>
                             <a href="file/Intro to Splunk.pdf" target="_blank">Certificado</a>
                         </div>
-                    </div>
-                </div>
-                <div class="cert-card">
-                    <div class="cert-icon institution-logo">
-                        <img src="assets/alura-logo.webp" alt="Logo Alura">
-                    </div>
-                    <div class="cert-info">
-                        <h3>IAM: gestão de identidades e acessos em ambientes cloud</h3>
-                        <p>Maio 2026</p>
-                        <span class="tag" id="em-andamento">Em andamento</span>
                     </div>
                 </div>
             </div>
