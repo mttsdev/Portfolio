@@ -270,8 +270,7 @@
                         <li><strong>Analisador de Protocolo:</strong> Wireshark (Captação e Inspeção de Tráfego)</li>
                         <li><strong>Framework de Referência:</strong> MITRE ATT&CK (Tática: Comando e Controle / Exfiltração | Técnica: T1071.004)</li>
                     </ul>
-                
-            </div>
+                </div>
 
             <div class="modal-section">
                 <h3>Estrutura do Laboratório</h3>
@@ -312,79 +311,75 @@
                 <p>Antes de haver um servidor ouvindo ou um bloqueio ativo, a aplicação recebia respostas imediatas do tipo <em>connection refused</em>, gerando pacotes de erro ICMP (<em>Port unreachable</em>) na rede, indicando que as consultas estavam de fato sendo empurradas para a camada de transporte, conforme registrado no terminal da vítima.</p>
                 
                 <div style="text-align: center; margin-top: 15px;">
-                    <!-- Espaço para print da validação/terminal do ataque -->
                     <img src="assets/projeto-DNS/script.jpeg" alt="Execução do ataque no terminal" style="width: 100%; max-width: 600px; border: 1px solid var(--titulos-icones); border-radius: 4px; box-shadow: 0 0 10px rgba(0,255,65,0.1);">
                 </div>
-        </div>
-
-        <div class="modal-section">
-            <h3>3. Triagem e Assinaturas no Wireshark</h3>
-            <p>Diferente de consultas de navegação legítimas, o tráfego suspeito apresentou características clássicas de tunelamento:</p>
-            <ul>
-                <li><strong>Frequência Sequencial:</strong> Múltiplas queries consecutivas em um curtíssimo intervalo de tempo para a reconstrução do payload no destino.</li>
-                <li><strong>Indicadores de Comprometimento (IoCs) Capturados:</strong>
-                    <ul>
-                        <br>
-                        <li><code>token-acesso-fmu.attack.local</code></li>
-                        <li><code>parte-2-sucesso.attack.local</code></li>
-                        <li><code>fim-da-string.attack.local</code></li>
-                        <br>
-                    </ul>
-                </li>
-            </ul>
-
-            <p>Para isolar o tráfego malicioso e eliminar o ruído de fundo de serviços legítimos do sistema, foi empregado o seguinte filtro avançado de exibição na barra de ferramentas do Wireshark:</p>
-            <div style="margin: 15px 0;">
-                <pre style="background: #0d1117; padding: 12px; border-radius: 6px; border: 1px solid #21262d; overflow-x: auto;"><code style="color: #79c0ff; font-family: monospace;">dns.flags.response == 0 and dns.qry.name contains "attack.local"</code></pre>
             </div>
 
-            <div style="text-align: center; margin-top: 15px;">
-                <!-- Espaço para o print do Wireshark mostrando os pacotes capturados antes da mitigação -->
-                <img src="assets/projeto-DNS/execucao-script.jpeg" alt="Captura do Tráfego Malicioso no Wireshark" style="width: 100%; max-width: 600px; border: 1px solid var(--titulos-icones); border-radius: 4px; box-shadow: 0 0 10px rgba(0,255,65,0.1);">
-            </div>
-        </div>
+            <div class="modal-section">
+                <h3>3. Triagem e Assinaturas no Wireshark</h3>
+                <p>Diferente de consultas de navegação legítimas, o tráfego suspeito apresentou características clássicas de tunelamento:</p>
+                <ul>
+                    <li><strong>Frequência Sequencial:</strong> Múltiplas queries consecutivas em um curtíssimo intervalo de tempo para a reconstrução do payload no destino.</li>
+                    <li><strong>Indicadores de Comprometimento (IoCs) Capturados:</strong>
+                        <ul>
+                            <br>
+                            <li><code>token-acesso-fmu.attack.local</code></li>
+                            <li><code>parte-2-sucesso.attack.local</code></li>
+                            <li><code>fim-da-string.attack.local</code></li>
+                            <br>
+                        </ul>
+                    </li>
+                </ul>
 
-        <div class="modal-section">
-            <h3>4. Ações de Contenção Imediata (Mitigação)</h3>
-            <p>Para estancar o vazamento e impedir a continuidade da exfiltração de dados confidenciais, foi aplicada uma regra restritiva de firewall (<code>iptables</code>) focada no protocolo, porta e destino mapeados:</p>
-            
-            <div style="margin: 15px 0;">
-                <pre style="background: #0d1117; padding: 12px; border-radius: 6px; border: 1px solid #21262d; overflow-x: auto;"><code style="color: #ff7b72; font-family: monospace;">sudo iptables -A OUTPUT -p udp --dport 53 -d 127.0.0.1 -j DROP</code></pre>
-            </div>
-
-            <p><strong>Validação da Eficácia da Defesa:</strong></p>
-            <ul>
-                <li><strong>Comportamento na Aplicação:</strong> Ao reexecutar o script de ataque, as consultas mudaram imediatamente de estado para <em>timed out</em>. Isso comprova que o firewall passou a descartar (DROP) os pacotes silenciosamente, impedindo-os de trafegar.
-                </li>
-                <div style="text-align: center; margin-top: 15px;">
-                    <img src="assets/projeto-DNS/firewall.jpeg" alt="Validação do bloqueio no Terminal e no Wireshark" style="width: 100%; max-width: 600px; border: 1px solid var(--titulos-icones); border-radius: 4px; box-shadow: 0 0 10px rgba(0,255,65,0.1);">
+                <p>Para isolar o tráfego malicioso e eliminar o ruído de fundo de serviços legítimos do sistema, foi empregado o seguinte filtro avançado de exibição na barra de ferramentas do Wireshark:</p>
+                <div style="margin: 15px 0;">
+                    <pre style="background: #0d1117; padding: 12px; border-radius: 6px; border: 1px solid #21262d; overflow-x: auto;"><code style="color: #79c0ff; font-family: monospace;">dns.flags.response == 0 and dns.qry.name contains "attack.local"</code></pre>
                 </div>
-                <li><strong>Comportamento na Rede:</strong> A inspeção contínua no Wireshark confirmou que o tráfego direcionado ao domínio <code>attack.local</code> cessou completamente, restando apenas requisições legítimas do sistema operacional.
-                </li>
+
                 <div style="text-align: center; margin-top: 15px;">
-                <img src="assets/projeto-DNS/resultado-final.jpeg" alt="Validação do bloqueio no Terminal e no Wireshark" style="width: 100%; max-width: 600px; border: 1px solid var(--titulos-icones); border-radius: 4px; box-shadow: 0 0 10px rgba(0,255,65,0.1);">
+                    <img src="assets/projeto-DNS/execucao-script.jpeg" alt="Captura do Tráfego Malicioso no Wireshark" style="width: 100%; max-width: 600px; border: 1px solid var(--titulos-icones); border-radius: 4px; box-shadow: 0 0 10px rgba(0,255,65,0.1);">
                 </div>
-            </ul>
-        </div>
+            </div>
 
-        <div class="modal-section">
-            <h3>5. Justificativa para Escalonamento (N1 para N2)</h3>
-            <p>O incidente foi classificado como **Verdadeiro Positivo** e foi escalonado para a equipe de Nível 2 devido aos seguintes fatores analíticos:</p>
-            <ol>
-                <li><strong>Confirmação de Vazamento Parcial:</strong> Uma análise cronológica prova que os primeiros blocos de informação trafegaram livremente pela interface de rede antes do acionamento e aplicação da regra de firewall pelo analista N1.</li>
-                <li><strong>Necessidade de Análise de Host:</strong> Como o escopo do Analista N1 limita-se à detecção e contenção perimetral/camada de rede, faz-se estritamente necessária uma investigação forense em nível de sistema operacional para determinar o vetor de infecção inicial e auditar possíveis persistências remanescentes criadas pelo atacante na máquina afetada.</li>
-            </ol>
-        </div>
+            <div class="modal-section">
+                <h3>4. Ações de Contenção Imediata (Mitigação)</h3>
+                <p>Para estancar o vazamento e impedir a continuidade da exfiltração de dados confidenciais, foi aplicada uma regra restritiva de firewall (<code>iptables</code>) focada no protocolo, porta e destino mapeados:</p>
+                
+                <div style="margin: 15px 0;">
+                    <pre style="background: #0d1117; padding: 12px; border-radius: 6px; border: 1px solid #21262d; overflow-x: auto;"><code style="color: #ff7b72; font-family: monospace;">sudo iptables -A OUTPUT -p udp --dport 53 -d 127.0.0.1 -j DROP</code></pre>
+                </div>
 
-        <div class="modal-section" style="margin-top: 25px; text-align: center;">
-            <!-- Ajuste o link do repositório se necessário -->
-            <a href="https://github.com/mttsdev/DNS-Tunneling" target="_blank" class="btn-cv">
-                <i class="fab fa-github"></i> Acessar Repositório
-            </a>
+                <p><strong>Validação da Eficácia da Defesa:</strong></p>
+                <ul>
+                    <li><strong>Comportamento na Aplicação:</strong> Ao reexecutar o script de ataque, as consultas mudaram imediatamente de estado para <em>timed out</em>. Isso comprova que o firewall passou a descartar (DROP) os pacotes silenciosamente, impedindo-os de trafegar.
+                    </li>
+                    <div style="text-align: center; margin-top: 15px;">
+                        <img src="assets/projeto-DNS/firewall.jpeg" alt="Validação do bloqueio no Terminal e no Wireshark" style="width: 100%; max-width: 600px; border: 1px solid var(--titulos-icones); border-radius: 4px; box-shadow: 0 0 10px rgba(0,255,65,0.1);">
+                    </div>
+                    <li><strong>Comportamento na Rede:</strong> A inspeção contínua no Wireshark confirmou que o tráfego direcionado ao domínio <code>attack.local</code> cessou completamente, restando apenas requisições legítimas do sistema operacional.
+                    </li>
+                    <div style="text-align: center; margin-top: 15px;">
+                    <img src="assets/projeto-DNS/resultado-final.jpeg" alt="Validação do bloqueio no Terminal e no Wireshark" style="width: 100%; max-width: 600px; border: 1px solid var(--titulos-icones); border-radius: 4px; box-shadow: 0 0 10px rgba(0,255,65,0.1);">
+                    </div>
+                </ul>
+            </div>
+
+            <div class="modal-section">
+                <h3>5. Justificativa para Escalonamento (N1 para N2)</h3>
+                <p>O incidente foi classificado como Verdadeiro Positivo e foi escalonado para a equipe de Nível 2 devido aos seguintes fatores analíticos:</p>
+                <ol>
+                    <li><strong>Confirmação de Vazamento Parcial:</strong> Uma análise cronológica prova que os primeiros blocos de informação trafegaram livremente pela interface de rede antes do acionamento e aplicação da regra de firewall pelo analista N1.</li>
+                    <li><strong>Necessidade de Análise de Host:</strong> Como o escopo do Analista N1 limita-se à detecção e contenção perimetral/camada de rede, faz-se estritamente necessária uma investigação forense em nível de sistema operacional para determinar o vetor de infecção inicial e auditar possíveis persistências remanescentes criadas pelo atacante na máquina afetada.</li>
+                </ol>
+            </div>
+
+            <div class="modal-section" style="margin-top: 25px; text-align: center;">
+                <a href="https://github.com/mttsdev/DNS-Tunneling" target="_blank" class="btn-cv">
+                    <i class="fab fa-github"></i> Acessar Repositório
+                </a>
+            </div>
         </div>
     </div>
-    </div>
-
         <!-- SKILLS -->
         <section id="skills" class="section">
             <h2 class="section-title">Habilidades & Competências</h2>
