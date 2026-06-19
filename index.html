@@ -82,12 +82,13 @@
             </div>
             <div class="project-card" onclick="openModal('modalCarrinhoBT')">
                 <div class="project-card__image-container">
-                    <img src="assets/carrinho.jpeg" alt="Hardware do Carrinho Bluetooth" class="project-card__img">
+                    <img src="assets/projeto-carrinho/carrinho.jpeg" alt="Hardware do Carrinho Bluetooth" class="project-card__img">
                 </div>
-                <h3 class="project-card__title">IoT: Robótica via Bluetooth</h3>
-                <p class="project-card__summary">Desenvolvimento de um rover com Arduino Uno, HC-05 e comunicação Serial via app.</p>
+                <h3 class="project-card__title">IoT: Carrinho via Bluetooth</h3>
+                <p class="project-card__summary">Desenvolvimento de um carrinho com Arduino Uno e comunicação via app.</p>
                 <span class="tag">VER DETALHES</span>
             </div>
+            <!-- ----- Projeto NMAP ----- -->
             <div class="project-card" onclick="openModal('modalNmap')">
                 <div class="project-card__image-container">
                     <picture>
@@ -97,7 +98,7 @@
                     </picture>
                 </div>
                 <h3 class="project-card__title">Varreduras de portas</h3>
-                <p class="project-card__summary">Identificação de serviços expostos e suas versões utilizando Nmap e como pode prejudicar empresas</p>
+                <p class="project-card__summary">Identificação de serviços expostos e suas versões utilizando Nmap e como pode prejudicar empresas.</p>
                 <span class="tag">VER DETALHES</span>
             </div>
             <!-- ----- Projeto DNS Tunneling ----- -->
@@ -109,12 +110,12 @@
                     </picture>
                 </div>
                 <h3 class="project-card__title">DNS Tunneling</h3>
-                <p class="project-card__summary">Simulação de exfiltração de dados, triagem avançada de pacotes no Wireshark e mitigação via firewall.</p>
+                <p class="project-card__summary">Simulação de exfiltração de dados, triagem  de pacotes no Wireshark e mitigação via firewall.</p>
                 <span class="tag">VER DETALHES</span>
             </div>
         </section>
         <!-- ----- DEPOIS DE CLICAR ----- -->
-         <!-- PROJETO BRUTE FORCE -->
+        <!-- MODAL - PROJETO BRUTE FORCE -->
         <div id="modalBruteForce" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeModal('modalBruteForce')">&times;</span>
@@ -144,23 +145,33 @@
                         <p>Esse projeto me fez enxergar como um atacante age, e como um SOC pode neutralizar a situação.</p>
                     </div>
                 </div>
+                <div class="modal-section" style="margin-top: 25px; text-align: center;">
+                    <a href="https://github.com/mttsdev/brute-force-e-mitigacao" target="_blank" class="btn-cv">
+                        <i class="fab fa-github"></i> Acessar Repositório
+                    </a>
+                </div>
             </div>
         </div>
-        <!-- PROJETO CARRINHO -->
+        <!--  MODAL - PROJETO CARRINHO -->
         <div id="modalCarrinhoBT" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeModal('modalCarrinhoBT')">&times;</span>
-                <h2 class="modal-title">Exploração IoT: Robótica e Comunicação Bluetooth</h2>
+                <h2 class="modal-title">IoT: Carrinho com Comunicação via Bluetooth</h2>
                 
                 <div class="modal-section">
                     <h3>Sobre o Projeto</h3>
-                    <p>Projeto prático desenvolvido na faculdade focado na integração de hardware e software para controle remoto. O objetivo foi estabelecer uma comunicação confiável entre um aplicativo mobile e um microcontrolador através do protocolo Bluetooth (RFCOMM).</p>
+                    <p>Projeto prático desenvolvido na faculdade focado na integração de hardware e software para controle remoto. O objetivo foi estabelecer uma comunicação entre um aplicativo mobile e um microcontrolador do carrinho através do protocolo Bluetooth.</p>
                 </div>
 
                 <div class="modal-section" style="text-align: center;">
                     <h3>Demonstração Prática</h3>
-                    <video controls style="width: 100%; max-width: 850px; border: 2px solid var(--titulos-icones); border-radius: 8px; box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); margin-top: 15px;">
-                        <source src="assets/video-carrinho.mp4" type="video/mp4">
+                    <video class="video-desktop" controls>
+                        <source src="assets/projeto-carrinho/video-carrinho.mp4" type="video/mp4">
+                        Seu navegador não suporta a tag de vídeo.
+                    </video>
+
+                    <video class="video-mobile" controls>
+                        <source src="assets/projeto-carrinho/Video.mp4" type="video/mp4">
                         Seu navegador não suporta a tag de vídeo.
                     </video>
                     <p style="font-size: 12px; color: #8b949e; margin-top: 8px;">(Interface de controle via Bluetooth Serial)</p>
@@ -174,6 +185,11 @@
                         <li><strong>Atuadores:</strong> Motores DC controlados via Ponte H (Driver L298N).</li>
                         <li><strong>Perspectiva de Segurança (IoT):</strong> Estudo prático de como os dados são transmitidos em texto claro via Bluetooth e as possíveis vulnerabilidades de interceptação em redes sem fio não criptografadas.</li>
                     </ul>
+                </div>
+                <div class="modal-section" style="margin-top: 25px; text-align: center;">
+                    <a href="https://github.com/mttsdev/Carrinho-Bluetooth" target="_blank" class="btn-cv">
+                        <i class="fab fa-github"></i> Acessar Repositório
+                    </a>
                 </div>
             </div>
         </div>
@@ -424,7 +440,7 @@
             <div class="certificacoes-grid">
                 <div class="cert-card">
                     <div class="cert-icon institution-logo">
-                        <img src="assets/fmu.webp" alt="">
+                        <img src="assets/logo/fmu.webp" alt="">
                     </div>
                     <div class="cert-info">
                         <h3>Formação em Ciência da Computação</h3>
@@ -433,7 +449,7 @@
                 </div>
                 <div class="cert-card">
                     <div class="cert-icon institution-logo">
-                        <img src="assets/alura-logo.webp" alt="Logo Alura">
+                        <img src="assets/logo/alura-logo.webp" alt="Logo Alura">
                     </div>
                     <div class="cert-info">
                         <h3>Cibersegurança: Fundamentos e práticas integradas</h3>
@@ -443,7 +459,7 @@
                 </div>
                 <div class="cert-card">
                     <div class="cert-icon institution-logo">
-                        <img src="assets/alura-logo.webp" alt="Logo Alura">
+                        <img src="assets/logo/alura-logo.webp" alt="Logo Alura">
                     </div>
                     <div class="cert-info">
                         <h3>Cibersegurança: Fundamentos e práticas em redes</h3>
@@ -453,7 +469,7 @@
                 </div>
                 <div class="cert-card">
                     <div class="cert-icon institution-logo">
-                        <img src="assets/alura-logo.webp" alt="Logo Alura">
+                        <img src="assets/logo/alura-logo.webp" alt="Logo Alura">
                     </div>
                     <div class="cert-info">
                         <h3>Linux para Cibersegurança: Shell Scripting, Kali Linux e automação</h3>
@@ -466,7 +482,7 @@
                 </div>
                 <div class="cert-card">
                     <div class="cert-icon institution-logo">
-                        <img src="assets/alura-logo.webp" alt="Logo Alura">
+                        <img src="assets/logo/alura-logo.webp" alt="Logo Alura">
                     </div>
                     <div class="cert-info">
                         <h3>Criptografia: Fundamentos, algoritmos e tecnologias emergentes</h3>
@@ -480,7 +496,7 @@
                 </div>
                 <div class="cert-card">
                     <div class="cert-icon institution-logo">
-                        <img src="assets/splunk.webp" alt="Logo Splunk">
+                        <img src="assets/logo/splunk.webp" alt="Logo Splunk">
                     </div>
                     <div class="cert-info">
                         <h3>Intro to Splunk(Portuguese Captions)</h3>
@@ -489,6 +505,20 @@
                             <span>Concluído</span>
                             <span style="color: white;">|</span>
                             <a href="file/Intro to Splunk.pdf" target="_blank">Certificado</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="cert-card">
+                    <div class="cert-icon institution-logo">
+                        <img src="assets/logo/cyberdimension_49x49.png" alt="Logo Splunk">
+                    </div>
+                    <div class="cert-info">
+                        <h3>Wazuh SIEM na prática: Detectando ataques em tempo real</h3>
+                        <p>Junho 2026</p>
+                        <div class="tag" id="concluido">
+                            <span>Concluído</span>
+                            <span style="color: white;">|</span>
+                            <a href="file/wazuh-siem-na-prática.pdf" target="_blank">Certificado</a>
                         </div>
                     </div>
                 </div>
